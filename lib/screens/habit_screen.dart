@@ -6,6 +6,7 @@ import 'package:habit_hub/blocs/habit_cubit.dart';
 import 'package:habit_hub/config/constraint.dart';
 import 'package:habit_hub/models/new_habit_model.dart';
 import 'package:habit_hub/repositories/icons_repository.dart';
+import 'package:theme/theme.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -20,6 +21,7 @@ class HabitScreen extends StatefulWidget {
 class _HabitScreenState extends State<HabitScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+
   onSaveHabitPressed(ThemeData themeData) async {
     nameController.text = nameController.text.trim();
     descriptionController.text = descriptionController.text.trim();
@@ -94,6 +96,7 @@ class _HabitScreenState extends State<HabitScreen> {
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
+    final theme = ThemeResolver.of(context);
     return Scaffold(
       backgroundColor: themeData.colorScheme.background,
       appBar: AppBar(
@@ -102,7 +105,7 @@ class _HabitScreenState extends State<HabitScreen> {
         title: Text(
           widget.id == null ? 'New habit' : 'Edit habit',
           style: TextStyle(
-            color: themeData.primaryColor,
+            color: theme.colors.sunrise,
             fontWeight: FontWeight.bold,
             fontSize: 25,
           ),
@@ -120,7 +123,21 @@ class _HabitScreenState extends State<HabitScreen> {
                 last: true,
               ),
               const HabitIconPicker(),
-              const SaveHabitButton(),
+              // const SaveHabitButton(),
+              Padding(
+                padding: defaultTopPadding,
+                child: AppButton.primary(
+                  key: const Key('loginForm_continue_raisedButton'),
+                  text: 'Save',
+                  elevation: 5,
+                  backgroundColor: theme.colors.sunrise,
+                  onPressed: () {
+                    getIt.get<Function>(
+                      instanceName: 'onSaveHabitPressed',
+                    )(themeData);
+                  },
+                ),
+              ),
               RemoveButton(id: widget.id)
             ],
           ),
@@ -143,6 +160,7 @@ class HabitTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
+    final theme = ThemeResolver.of(context);
     return Padding(
       padding: defaultTopPadding / 2,
       child: Column(
@@ -169,7 +187,7 @@ class HabitTextField extends StatelessWidget {
               fontSize: 18,
               fontWeight: FontWeight.w700,
             ),
-            cursorColor: themeData.colorScheme.primary,
+            cursorColor: theme.colors.sunrise,
             cursorWidth: 3,
             decoration: InputDecoration(
               isDense: true,
@@ -204,6 +222,7 @@ class HabitIconItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
+    final theme = ThemeResolver.of(context);
     return GestureDetector(
       onTap: () {
         context.read<NewHabitCubit>().setNewHabitIconCodePoint(
@@ -212,12 +231,12 @@ class HabitIconItem extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: iconCodePoint == IconsRepository().getFeaturedIcons()[index]
-              ? themeData.colorScheme.primary
+              ? theme.colors.sunrise
               : themeData.colorScheme.surfaceVariant,
           borderRadius: BorderRadius.circular(15),
         ),
         child: Icon(
-          IconsRepository().getIconData(
+          IconsRepository.getIconData(
             IconsRepository().getFeaturedIcons()[index],
           ),
           color: iconCodePoint == IconsRepository().getFeaturedIcons()[index]
@@ -285,6 +304,7 @@ class SaveHabitButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
+    final theme = ThemeResolver.of(context);
     return Padding(
       padding: defaultTopPadding,
       child: ElevatedButton(
@@ -294,7 +314,7 @@ class SaveHabitButton extends StatelessWidget {
           )(themeData);
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: themeData.colorScheme.primary,
+          backgroundColor: theme.colors.sunrise,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),

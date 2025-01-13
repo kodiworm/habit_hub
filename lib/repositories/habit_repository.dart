@@ -85,5 +85,3 @@ class HabitRepository {
     );
   }
 }
-// Martin Gogołowicz || SobGOG || 03.09.2023
-// Last edit: Martin Gogołowicz || SobGOG || 14.09.2023

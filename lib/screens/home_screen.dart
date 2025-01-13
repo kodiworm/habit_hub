@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:habit_hub/blocs/selected_day_cubit.dart';
 import 'package:habit_hub/config/constraint.dart';
@@ -12,6 +13,7 @@ import 'package:habit_hub/repositories/icons_repository.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:get_it/get_it.dart';
+import 'package:theme/theme.dart';
 
 final GetIt getIt = GetIt.instance;
 final locale = getIt.get<Locale>();
@@ -28,39 +30,44 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
+    final theme = ThemeResolver.of(context);
+
     return Scaffold(
-      backgroundColor: themeData.colorScheme.background,
+      backgroundColor: themeData.colorScheme.background ,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(40),
+        preferredSize: const Size.fromHeight(60),
         child: AppBar(
           backgroundColor: themeData.colorScheme.background,
           elevation: 0,
-          leading: IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.settings),
+          leading: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: AppText.h1('HH'),
+            // child: Image.asset(
+            //   'assets/images/logos/white_logo.png',
+            //   fit: BoxFit.contain,
+            //   width: 150,
+            //   height: 150,
+            // ),
           ),
           actions: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.event_note),
-            ),
-            IconButton(
-              onPressed: () {
-                context.push('/habits/new');
-              },
-              icon: const Icon(Icons.add_circle),
+            Padding(
+              padding: const EdgeInsets.only(right: 12.0),
+              child: OutlinedButton.icon(
+                onPressed: () {
+                  context.push('/habits/new');
+                },
+                icon: Icon(Icons.add_circle, color: theme.colors.sunrise,),
+                label: Text("New Habit", style: TextStyle(color: theme.colors.sunrise),),
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  side: BorderSide(color: theme.colors.sunrise), // Border color
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8), // Rounded corners
+                  ),
+                ),
+              ),
             ),
           ],
-          title: Text(
-            'Habits Hub',
-            style: themeData.textTheme.bodyLarge?.copyWith(
-              fontFamily: 'Montserrat',
-              color: themeData.colorScheme.primary,
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          centerTitle: true,
         ),
       ),
       body: SafeArea(
@@ -88,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Habit habit = habitsToShow[index];
                           return HabitItem(
                             title: habit.name,
-                            icon: IconsRepository().getIconData(habit.icon),
+                            icon: IconsRepository.getIconData(habit.icon),
                             description: habit.isDone ? 'Finished' : 'To-do',
                             iconDescription:
                                 habit.isDone ? Icons.check_circle : Icons.star,
@@ -174,10 +181,11 @@ class CalendarSelectedDay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
+    final theme = ThemeResolver.of(context);
     return Container(
       decoration: BoxDecoration(
         color: isSameDay(DateTime.now(), day)
-            ? themeData.colorScheme.primary
+            ? theme.colors.sunrise
             : themeData.colorScheme.surfaceVariant,
         borderRadius: const BorderRadius.only(
           bottomLeft: defaultBorderRadius,
@@ -204,10 +212,11 @@ class CalendarTodayDay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
+    final theme = ThemeResolver.of(context);
     return Center(
       child: Container(
         decoration: BoxDecoration(
-          color: themeData.colorScheme.primary,
+          color: theme.colors.sunrise,
           borderRadius: BorderRadius.circular(defaultBorderRadius.x),
         ),
         padding: const EdgeInsets.symmetric(
@@ -234,10 +243,11 @@ class CalendarDow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
+    final theme = ThemeResolver.of(context);
     return Container(
       decoration: BoxDecoration(
         color: isSameDay(DateTime.now(), day)
-            ? themeData.colorScheme.primary
+            ? theme.colors.sunrise
             : themeData.colorScheme.surfaceVariant,
         borderRadius: const BorderRadius.only(
           topLeft: defaultBorderRadius,
@@ -263,11 +273,12 @@ class CalendarDowSameDay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
+    final theme = ThemeResolver.of(context);
     return Center(
       child: Text(
         text,
         style: TextStyle(
-          color: themeData.colorScheme.primary,
+          color: theme.colors.sunrise,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -281,13 +292,14 @@ class NoHabitsFound extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
+    final theme = ThemeResolver.of(context);
     return Container(
       decoration: BoxDecoration(
-        color: themeData.colorScheme.primary,
+        color: theme.colors.sunrise,
         borderRadius: BorderRadius.circular(15),
       ),
       padding: const EdgeInsets.all(15),
-      margin: const EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 36),
       child: Text(
         'No habits found',
         textAlign: TextAlign.center,
@@ -318,11 +330,12 @@ class HabitItemVisible extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
+    final theme = ThemeResolver.of(context);
     return Row(
       children: [
         Container(
           decoration: BoxDecoration(
-            color: themeData.colorScheme.primary,
+            color: theme.colors.sunrise,
             borderRadius: BorderRadius.circular(15),
           ),
           padding: const EdgeInsets.all(10),
@@ -438,6 +451,7 @@ class _MarkAsDoneButtonState extends State<MarkAsDoneButton> {
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
+    final theme = ThemeResolver.of(context);
     return Stack(
       children: [
         ElevatedButton(
@@ -454,7 +468,7 @@ class _MarkAsDoneButtonState extends State<MarkAsDoneButton> {
                 ? 'Undo'
                 : 'Mark as done',
             style: themeData.textTheme.bodyMedium?.copyWith(
-              color: themeData.colorScheme.primary,
+              color: theme.colors.sunrise,
               fontSize: 15,
               fontWeight: FontWeight.w600,
             ),
@@ -465,7 +479,7 @@ class _MarkAsDoneButtonState extends State<MarkAsDoneButton> {
           blastDirectionality: BlastDirectionality.explosive,
           shouldLoop: false,
           colors: [
-            themeData.colorScheme.primary,
+            theme.colors.sunrise,
           ],
           createParticlePath: drawStar,
         ),
@@ -483,12 +497,13 @@ class HabitItemCalendarItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
+    final theme = ThemeResolver.of(context);
     String dayString = DateFormat.d(locale.toString()).format(day);
     return Center(
       child: Container(
         decoration: BoxDecoration(
           color: doneOn.contains(day)
-              ? themeData.colorScheme.primary
+              ? theme.colors.sunrise
               : themeData.colorScheme.surface,
           borderRadius: BorderRadius.circular(10),
         ),
@@ -499,7 +514,7 @@ class HabitItemCalendarItem extends StatelessWidget {
             style: themeData.textTheme.bodyMedium?.copyWith(
               color: doneOn.contains(day)
                   ? themeData.colorScheme.onPrimary
-                  : themeData.colorScheme.primary,
+                  : theme.colors.sunrise,
               fontWeight: FontWeight.w600,
               fontSize: 15,
             ),
@@ -517,6 +532,7 @@ class EditHabitButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
+    final theme = ThemeResolver.of(context);
     return TextButton(
       onPressed: () {
         context.push('/habits/$id');
@@ -524,7 +540,7 @@ class EditHabitButton extends StatelessWidget {
       child: Text(
         'Edit',
         style: themeData.textTheme.bodyMedium?.copyWith(
-          color: themeData.colorScheme.primary,
+          color: theme.colors.sunrise,
           fontSize: 15,
           fontWeight: FontWeight.w600,
         ),
@@ -636,6 +652,7 @@ class HabitItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
+    final theme = ThemeResolver.of(context);
     return Padding(
       padding: defaultTopPadding / 2,
       child: AnimatedSize(

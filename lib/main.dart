@@ -4,11 +4,15 @@ import 'package:get_it/get_it.dart';
 import 'package:habit_hub/blocs/habit_cubit.dart';
 import 'package:habit_hub/config/theme_data.dart';
 import 'package:habit_hub/models/habit_hive_model.dart';
+import 'package:habit_hub/screens/auth/login/bloc/login_cubit.dart';
+import 'package:habit_hub/screens/auth/login/login_screen.dart';
+import 'package:habit_hub/screens/auth/signup/bloc/signup_cubit.dart';
+import 'package:habit_hub/screens/auth/signup/signup_screen.dart';
 import 'package:habit_hub/screens/habit_screen.dart';
 import 'package:habit_hub/screens/home_screen.dart';
-import 'package:habit_hub/screens/login_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:theme/theme.dart';
 
 void main() async {
   await Hive.initFlutter();
@@ -31,6 +35,7 @@ class AppState extends State<App> {
   final _router = GoRouter(
     routes: [
       GoRoute(path: '/', builder: (context, state) => const LoginScreen()),
+      GoRoute(path: '/signup', builder: (context, state) => const SignUpScreen()),
       GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
       GoRoute(
         path: '/habits/new',
@@ -61,14 +66,31 @@ class AppState extends State<App> {
       title: 'Habits Hub',
       builder: (context, child) {
         Locale locale = Localizations.localeOf(context);
+
         final GetIt getIt = GetIt.I;
+
         if (!getIt.isRegistered<Locale>()) {
           getIt.registerSingleton<Locale>(locale);
         }
-        return MediaQuery(
-          data: MediaQuery.of(context)
-              .copyWith(textScaler: const TextScaler.linear(1.0)),
-          child: child!,
+
+        if (!getIt.isRegistered<LoginCubit>()) {
+          getIt.registerSingleton<LoginCubit>(LoginCubit());
+        }
+
+        if (!getIt.isRegistered<SignUpCubit>()) {
+          getIt.registerSingleton<SignUpCubit>(SignUpCubit());
+        }
+
+        // return MediaQuery(
+        //   data: MediaQuery.of(context)
+        //       .copyWith(textScaler: const TextScaler.linear(1.0)),
+        //   child: child!,
+        // );
+
+        final _themeData = ThemeDataContainer.main();
+        return ThemeResolver(
+          data: _themeData,
+          child: Theme(data: _themeData.theme, child: child!),
         );
       },
     );
