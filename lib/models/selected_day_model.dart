@@ -10,5 +10,3 @@ class SelectedDay with _$SelectedDay {
     required List<Habit> habits,
   }) = _SelectedDay;
 }
-// Martin Gogołowicz || SobGOG || 02.09.2023
-// Last edit: Martin Gogołowicz || SobGOG || 02.09.2023
