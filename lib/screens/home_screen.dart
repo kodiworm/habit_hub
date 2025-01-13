@@ -39,16 +39,17 @@ class _HomeScreenState extends State<HomeScreen> {
         child: AppBar(
           backgroundColor: themeData.colorScheme.background,
           elevation: 0,
-          leading: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: AppText.h1('HH'),
-            // child: Image.asset(
-            //   'assets/images/logos/white_logo.png',
-            //   fit: BoxFit.contain,
-            //   width: 150,
-            //   height: 150,
-            // ),
-          ),
+          // leading: Padding(
+          //   padding: const EdgeInsets.all(8.0),
+          //   child: AppText.h3('Habit Hub'),
+          //   // child: Image.asset(
+          //   //   'assets/images/logos/white_logo.png',
+          //   //   fit: BoxFit.contain,
+          //   //   width: 150,
+          //   //   height: 150,
+          //   // ),
+          // ),
+          title: AppText.h2('Habit Hub'),
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 12.0),
